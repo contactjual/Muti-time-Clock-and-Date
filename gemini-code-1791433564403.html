@@ -1,0 +1,245 @@
+<style>
+  /* মেইন কন্টেইনার - ব্যাকগ্রাউন্ড ফুল ব্ল্যাক এবং ল্যান্ডস্কেপ অপ্টিমাইজড */
+  .apple-clock-container {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* বাম পাশ: ডিজিটাল টাইম সেকশন (বাংলাদেশ ও ইউএসএ) */
+  .left-clocks {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .clock-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .clock-label {
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #8e8e93;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+  /* বাংলাদেশ লেবেলের জন্য হলুদ কালার */
+  .clock-label.bd-label {
+    color: #ffd60a;
+  }
+
+  /* ইউএসএ লেবেলের জন্য লাল কালার */
+  .clock-label.usa-label {
+    color: #ff453a;
+  }
+
+  .digital-time {
+    font-size: 48px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ইউএসএ টাইমের মূল কালার সবুজ করা হয়েছে */
+  .digital-time.usa-highlight {
+    color: #30d158; 
+  }
+
+  /* সেকেন্ডের কালার গ্রে/হালকা করা হয়েছে */
+  .digital-sec {
+    font-size: 24px;
+    color: #8e8e93; 
+    margin-left: 4px;
+  }
+
+  /* ঘড়ির নিচে ডেট এবং দিন দেখানোর জন্য স্টাইল */
+  .clock-date {
+    font-size: 16px;
+    color: #8e8e93;
+    font-weight: 500;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ডান পাশ: ক্যালেন্ডার সেকশন */
+  .right-calendar {
+    background-color: #000000;
+    padding: 10px;
+  }
+
+  .cal-header {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff453a;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    text-align: center;
+  }
+
+  .cal-weekdays {
+    font-size: 13px;
+    color: #8e8e93;
+    font-weight: 600;
+  }
+
+  .cal-days {
+    font-size: 15px;
+    font-weight: 400;
+    color: #ffffff;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  /* আজকের ডেট বা সার্কেল হাইলাইট */
+  .cal-days.today {
+    background-color: #ff453a;
+    color: #ffffff;
+    border-radius: 50%;
+    font-weight: 600;
+  }
+
+  .cal-days.empty {
+    color: transparent;
+  }
+
+  /* মোবাইল ল্যান্ডস্কেপ এবং ছোট স্ক্রিনের জন্য রেসপন্সিভ ডিজাইন */
+  @media (max-width: 768px) {
+    .apple-clock-container {
+      flex-direction: row;
+      justify-content: space-around;
+      padding: 10px;
+    }
+    .digital-time {
+      font-size: 36px;
+    }
+    .clock-date {
+      font-size: 14px;
+    }
+    .cal-grid {
+      gap: 6px;
+    }
+    .cal-days {
+      font-size: 13px;
+      height: 24px;
+      width: 24px;
+    }
+  }
+</style>
+
+<div class="apple-clock-container">
+  <!-- বাম পাশ: ডিজিটাল ঘড়ি (বাংলাদেশ ও ইউএসএ) -->
+  <div class="left-clocks">
+    <div class="clock-box">
+      <!-- বাংলাদেশ লেবেল হলুদ কালার করা হয়েছে -->
+      <span class="clock-label bd-label">Bangladesh (BST)</span>
+      <!-- বাংলাদেশ টাইম-এ সেকেন্ড গ্রে কালার রাখা হয়েছে -->
+      <div class="digital-time" id="bd-time">--:--<span class="digital-sec">--</span></div>
+      <div class="clock-date" id="bd-date">-- - ---</div>
+    </div>
+    <div class="clock-box">
+      <!-- ইউএসএ লেবেল লাল এবং টাইম সবুজ কালারে রাখা হয়েছে -->
+      <span class="clock-label usa-label">USA (New York)</span>
+      <div class="digital-time usa-highlight" id="usa-time">--:--</div>
+      <div class="clock-date" id="usa-date">-- - ---</div>
+    </div>
+  </div>
+
+  <!-- ডান পাশ: ডাইনামিক ক্যালেন্ডার -->
+  <div class="right-calendar">
+    <div class="cal-header" id="cal-month-year">SEPTEMBER</div>
+    <div class="cal-grid" id="calendar-body">
+      <!-- জাভাস্ক্রিপ্ট দিয়ে ডায়নামিক্যালি জেনারেট হবে -->
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateClocks() {
+    const now = new Date();
+
+    // ১. বাংলাদেশ টাইম ও ডেট (Asia/Dhaka)
+    const optionsBDTime = { timeZone: 'Asia/Dhaka', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const timeStringBD = now.toLocaleTimeString('en-US', optionsBDTime);
+    const [bdH, bdM, bdS] = timeStringBD.split(':');
+    document.getElementById('bd-time').innerHTML = `${bdH}:${bdM}<span class="digital-sec">${bdS}</span>`;
+
+    const optionsBDDate = { timeZone: 'Asia/Dhaka', day: 'numeric', weekday: 'short' };
+    const partsBD = new Intl.DateTimeFormat('en-US', optionsBDDate).formatToParts(now);
+    let bdDayNum = partsBD.find(p => p.type === 'day').value;
+    let bdDayName = partsBD.find(p => p.type === 'weekday').value;
+    document.getElementById('bd-date').innerText = `${bdDayNum} - ${bdDayName}`;
+
+    // ২. ইউএসএ টাইম ও ডেট (America/New_York)
+    const optionsUSATime = { timeZone: 'America/New_York', hour12: false, hour: '2-digit', minute: '2-digit' };
+    const timeStringUSA = now.toLocaleTimeString('en-US', optionsUSATime);
+    document.getElementById('usa-time').innerText = timeStringUSA;
+
+    const optionsUSADate = { timeZone: 'America/New_York', day: 'numeric', weekday: 'short' };
+    const partsUSA = new Intl.DateTimeFormat('en-US', optionsUSADate).formatToParts(now);
+    let usaDayNum = partsUSA.find(p => p.type === 'day').value;
+    let usaDayName = partsUSA.find(p => p.type === 'weekday').value;
+    document.getElementById('usa-date').innerText = `${usaDayNum} - ${usaDayName}`;
+  }
+
+  function renderCalendar() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); 
+    const currentDate = now.getDate();
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    document.getElementById('cal-month-year').innerText = monthNames[month];
+
+    const firstDayIndex = new Date(year, month, 1).getDay(); 
+    const totalDays = new Date(year, month + 1, 0).getDate(); 
+
+    const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    let calendarHTML = '';
+
+    weekdays.forEach(day => {
+      calendarHTML += `<div class="cal-weekdays">${day}</div>`;
+    });
+
+    for (let i = 0; i < firstDayIndex; i++) {
+      calendarHTML += `<div class="cal-days empty"></div>`;
+    }
+
+    for (let i = 1; i <= totalDays; i++) {
+      let isToday = (i === currentDate) ? 'today' : '';
+      calendarHTML += `<div class="cal-days ${isToday}">${i}</div>`;
+    }
+
+    document.getElementById('calendar-body').innerHTML = calendarHTML;
+  }
+
+  // প্রতি ১ সেকেন্ডে ঘড়ি ও ঘড়ির নিচের ডেট/দিন আপডেট হবে
+  setInterval(updateClocks, 1000);
+  
+  // পেজ লোড হওয়ার সাথে সাথে ঘড়ি ও ক্যালেন্ডার রান করবে
+  updateClocks();
+  renderCalendar();
+</script>
